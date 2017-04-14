@@ -1,38 +1,39 @@
 var express = require ('express')
 var app = express()
+var fs = require('fs')
 
-var ceritaList = [
-  {
-    "judul" : "Ini judul satu",
-    "isi"   : "Ini Isi satu"
+const PORT = process.env.PORT || 8080
+const path = __dirname
+
+var ceritaList = require ('./cerita.js')
+var namaFile = "cerita.txt"
+
+var File = {
+  isTxtFile: function(value){
+    return value.substr((value.lastIndexOf('.')+1)) === "txt"
   },
-  {
-    "judul" : "Ini judul kedua",
-    "isi"   : "Ini Isi kedua"
-  },
-  {
-    "judul" : "Ini judul ketiga",
-    "isi"   : "Ini Isi ketiga"
+  title: function(value){
+    return value.replace(/\.[^/.]+$/,"")
   }
-]
+}
 
-app.get("/",function(request,response,next){
-  response.setHeader("Content-Type","text/html")
-  response.write('<h3>Halaman Utama</h3>')
-  response.write('<ul>')
-  ceritaList.forEach(function(cerita, index){
-    response.write('<li><a href = " /cerita/'+index+'">'+cerita.judul+'</a></li>')
-  })
-  response.write('</ul>')
-  response.end()
-})
-
-//app.get("/cerita/:nomor",function(req,res){
-//  var cerita=ceritaList[req.params.nomor]
-//  res.send('<h3>'+cerita.judul+'</h3')
-//  res.send('<p>'+cerita.isi+'</p>')
-//  res.end()
+//fs.readFile(value,"utf8",function(err,data){
+  //if(err) throw err
+    //console.log(data)
+    //return data
 //})
-app.listen(8080,function(){
-  console.log("magic happen at port 8080")
+
+app.set('view engine','pug')
+app.get("/",function(req,res,next){
+  res.setHeader("Content-Type","text/html")
+ 
+  fs.readdir(path,function Callback(err,files){
+    var file = files.filter(File.isTxtFile).map(File.title)
+    console.log(file)
+  })
+  
+  res.end()
+})
+app.listen(PORT,function(){
+  console.log("magic happen at port "+ PORT)
 })
