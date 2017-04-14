@@ -10,9 +10,6 @@ function isTxtFile(value){
   return value.substr((value.lastIndexOf('.')+1)) === "txt"
 }
 
-//Best Practice kalau mau buat 
-//method yang sifat nya private
-//
 var File = (function(){
   function File(name){
     this.getName = function(){
