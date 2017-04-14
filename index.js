@@ -1,39 +1,48 @@
 var express = require ('express')
 var app = express()
 var fs = require('fs')
+var ceritaList = require ('./cerita.js')
 
 const PORT = process.env.PORT || 8080
 const path = __dirname
 
-var ceritaList = require ('./cerita.js')
-var namaFile = "cerita.txt"
-
-var File = {
-  isTxtFile: function(value){
-    return value.substr((value.lastIndexOf('.')+1)) === "txt"
-  },
-  title: function(value){
-    return value.replace(/\.[^/.]+$/,"")
-  }
+function isTxtFile(value){
+  return value.substr((value.lastIndexOf('.')+1)) === "txt"
 }
 
-//fs.readFile(value,"utf8",function(err,data){
-  //if(err) throw err
-    //console.log(data)
-    //return data
-//})
+//Best Practice kalau mau buat 
+//method yang sifat nya private
+//
+var File = (function(){
+  function File(name){
+    this.getName = function(){
+       return name.replace(/\.[^/.]+$/,"")
+    }
+  }
+  return File
+}())
 
-app.set('view engine','pug')
+
 app.get("/",function(req,res,next){
-  res.setHeader("Content-Type","text/html")
- 
+  res.setHeader("Content-Type","text/html") 
   fs.readdir(path,function Callback(err,files){
-    var file = files.filter(File.isTxtFile).map(File.title)
-    console.log(file)
+    var fileList = files.filter(isTxtFile)
+    fileList.forEach(function(file,index){
+      var vFile = new File(file)
+      res.write('<li><a href="/file/'+file+'">'+ vFile.getName()+'</a></li>')
+    })
+    res.end()
   })
-  
-  res.end()
 })
+
+app.get("/file/:isiFile",function(req,res,next){
+  var isiFile = req.params.isiFile
+  fs.readFile(isiFile,"utf8",function(err,data){
+    if(err) throw err
+    res.write(data)
+    res.end()
+  })
+ })
 app.listen(PORT,function(){
   console.log("magic happen at port "+ PORT)
 })
