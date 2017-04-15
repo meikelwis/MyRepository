@@ -3,8 +3,6 @@ const app = express()
 const fs = require('fs')
 const PORT = process.env.PORT || 8080
 
-var ceritaPath = __dirname + "/cerita/"
-
 function isTxtFile(value){
   var re = /(?:\.([^.]+))?$/
   return re.exec(value)[1] === 'txt'
@@ -13,6 +11,7 @@ function getTitle(value){
   return value.replace(/\.[^/.]+$/,'')
 }
 app.get('/',function(req,res,next){
+  var ceritaPath = __dirname + "/cerita/"
   res.setHeader('Content-Type','text/html')
   res.write('<h3>Ini adalah halaman utama</h3>') 
   fs.readdir(ceritaPath,function Callback(err,files){
