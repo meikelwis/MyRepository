@@ -1,45 +1,41 @@
-var express = require ('express')
-var app = express()
-var fs = require('fs')
-var ceritaList = require ('./cerita.js')
-
+const express = require ('express')
+const app = express()
+const fs = require('fs')
 const PORT = process.env.PORT || 8080
-const path = __dirname
+
+var ceritaPath = __dirname + "/cerita/"
 
 function isTxtFile(value){
-  return value.substr((value.lastIndexOf('.')+1)) === "txt"
+  var re = /(?:\.([^.]+))?$/
+  return re.exec(value)[1] === 'txt'
 }
-
-var File = (function(){
-  function File(name){
-    this.getName = function(){
-       return name.replace(/\.[^/.]+$/,"")
-    }
-  }
-  return File
-}())
-
-
-app.get("/",function(req,res,next){
-  res.setHeader("Content-Type","text/html") 
-  fs.readdir(path,function Callback(err,files){
+function getTitle(value){
+  return value.replace(/\.[^/.]+$/,'')
+}
+app.get('/',function(req,res,next){
+  res.setHeader('Content-Type','text/html')
+  res.write('<h3>Ini adalah halaman utama</h3>') 
+  fs.readdir(ceritaPath,function Callback(err,files){
     var fileList = files.filter(isTxtFile)
     fileList.forEach(function(file,index){
-      var vFile = new File(file)
-      res.write('<li><a href="/file/'+file+'">'+ vFile.getName()+'</a></li>')
+      res.write('<li><a href="/file/'+file+'">'+ getTitle(file)+'</a></li>')
     })
     res.end()
   })
 })
 
-app.get("/file/:isiFile",function(req,res,next){
-  var isiFile = req.params.isiFile
-  fs.readFile(isiFile,"utf8",function(err,data){
+app.set('view engine','pug')
+
+app.get("/file/:namaFile",function(req,res,next){
+  var file = req.params.namaFile
+  var namaFilePath = __dirname + '/cerita/' + file
+  fs.readFile(namaFilePath,'utf8',function(err,data){
+    var title = getTitle(file)
     if(err) throw err
-    res.write(data)
+    res.render('index',{title,data})
     res.end()
   })
  })
 app.listen(PORT,function(){
-  console.log("magic happen at port "+ PORT)
+  console.log('magic happen at port '+ PORT)
 })
