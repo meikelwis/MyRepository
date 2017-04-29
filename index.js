@@ -11,7 +11,10 @@ app.get('*', function (req, res, next) {
 app.get('/', function (req, res, next) {
     res.render('index', { cerita })
 })
-app.get("/cerita/:nomor", function (req, res, next) {
+app.get('/cerita/buat-cerita',function(req,res,next){
+    res.render('buat-cerita')
+})
+app.get('/cerita/isi-cerita/:nomor', function (req, res, next) {
     var nomorCerita = cerita[req.params.nomor]
     res.render('isi-cerita', { nomorCerita })
 })

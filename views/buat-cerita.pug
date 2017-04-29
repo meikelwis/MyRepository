@@ -1,0 +1,16 @@
+html
+    body
+        form(method='POST' action='/cerita/buat-cerita')
+            h2 Judul
+            label(for='judul')
+                input#judul(type='text',placeholder='Masukkan Judul')
+            h3 Isi
+            label( for='isi')
+                textarea#isi(rows='6',cols='30')
+        a(href='/')
+            button(type='button') Back
+        a(href='/' style={'margin-left' : '70px'})
+            button#submitCerita(type='submit') Submit Cerita
+
+	    
+    

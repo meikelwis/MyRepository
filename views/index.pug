@@ -1,10 +1,12 @@
 html
     head
     body
-        h3 Selamat datang di halaman utama
-        p silakan pilih cerita :
+        h3 Selamat datang di halaman 
+        p silahkan pilih cerita 
         ul
             each val in cerita
                 li
-                    a(href='/cerita/'+val.judul)
-                        = val.judul
+                    a(href='/cerita/isi-cerita/'+val.judul)
+                        =val.judul
+        a(href='/cerita/buat-cerita')
+            button(type='button') Buat Cerita
