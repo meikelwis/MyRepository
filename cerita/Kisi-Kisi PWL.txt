@@ -1,0 +1,10 @@
+1. Modul http tanpa express
+2. Req.query
+3. Req.Params
+4. Req.Body
+5. Req.bodyParser
+6. Http Methods
+7. Http Status
+8. Express Basic Routing
+9. Express Static
+10. Express Router

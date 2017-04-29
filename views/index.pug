@@ -1,6 +1,10 @@
 html
-  head
-  body
-      h3=title
-      p=data
-      a(href="/") Back
+    head
+    body
+        h3 Selamat datang di halaman utama
+        p silakan pilih cerita :
+        ul
+            each val in cerita
+                li
+                    a(href='/cerita/'+val.judul)
+                        = val.judul
